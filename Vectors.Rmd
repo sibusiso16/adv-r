@@ -17,7 +17,7 @@ knitr::include_graphics("diagrams/vectors/summary-tree.png")
 
 [^generic-vectors]: A few places in R's documentation call lists generic vectors to emphasise their difference from atomic vectors.
 
-Every vector can also have __attributes__, which you can think of as a named list containing arbitrary metadata. Two attributes are particularly important because they create important vector variants. The **dim**ension attribute turns vectors into matrices and arrays. The __class__ attribute powers the S3 object system. You'll learn how to use S3 in Chapter \@ref(s3), but here, you'll learn about a handful of the most important S3 vectors: factors, date/times, data frames, and tibbles. Matrices and data frames are not necessarily what you think of as vectors, so you'll learn why these 2d structures are considered to be vectors in R.
+Every vector can also have __attributes__, which you can think of as a named list containing arbitrary metadata. Two attributes are particularly important because they create important vector variants. The **dim**ension attribute turns vectors into matrices and arrays. The __class__ attribute powers the S3 object system. You'll learn how to use S3 in Chapter \@ref(s3), but here, you'll learn about a handful of the most important S3 vectors: factors, date/times, data frames, and tibbles. Matrices and data frames are not necessarily what you think of a vectors, so you'll learn why these 2d structures are considered to be vectors in R.
 
 ### Quiz {-}
 
@@ -82,7 +82,7 @@ Each of the four primary atomic vectors has special syntax to create an individu
 
 * Doubles can be specified in decimal (`0.1234`), scientific (`1.23e4`), or 
   hexadecimal (`0xcafe`) forms. There are three special values unique to
-  doubles: `Inf`, `-Inf`, and `NaN`. The double misssing value is `NA_real_`.
+  doubles: `Inf`, `-Inf`, and `NaN`. The double missing value is `NA_real_`.
   
 * Integers are written similarly to doubles but must be followed by `L`[^L-suffix]
   (`1234L`, `1e4L`, or `0xcafeL`), and can not include decimals. The integer
@@ -133,7 +133,7 @@ The type is a property of the entire atomic vector, so all elements of an atomic
 str(c("a", 1))
 ```
 
-Coercion often happens automatically. Most mathematical functions (`+`, `log`, `abs`, etc.) will coerce to numeric. This coercion is particularly useful for logical vectors because `TRUE` becomes 1 and `FALSE` becomes 0.
+Coercion often happens automatically. Most mathematical functions (`+`, `log`, `abs`, etc.) will coerce to numeric. This is particularly useful for logical vectors because `TRUE` becomes 1 and `FALSE` becomes 0.
 
 ```{r}
 x <- c(FALSE, FALSE, TRUE)
@@ -146,7 +146,7 @@ sum(x)
 mean(x)
 ```
 
-Vectorised logical operations (`&`, `|`, `any`, etc) will coerce to a logical, but since this might lose information, it's always accompanied by a warning.
+Vectorised logical operations (`&`, `|`, `any`, etc) will coerce to a logical, but since this might lose information, it's always accompanied a warning.
 
 Generally, you can deliberately coerce by using an `as.` function, like `as.character()`, `as.double()`, `as.integer()`, or `as.logical()`. Failed coercions from strings generate a warning and a missing value:
 
@@ -333,11 +333,12 @@ One of the most important attributes is `class`, which defines the S3 object sys
 
 In this section, we'll discuss three important S3 vectors used in base R:
 
-* Categorical data, where values can only come from a fixed set of levels, are recorded in __factor__ vectors.
+* Categorical data, where values can only come from a fixed set of levels,  
+  are recorded in __factor__ vectors.
 
 * Dates (with day resolution) are recorded in __Date__ vectors.
 
-* Date-times (with second or sub-second resolution) are stored in
+* Date-times (with second or sub-second) resolution are stored in
   __POSIXct__ vectors.
 
 ```{r, echo = FALSE, out.width = NULL}
@@ -371,14 +372,14 @@ table(sex_char)
 table(sex_factor)
 ```
 
-A minor variation of factors is __ordered__ factors, which generally behave similarly, but declare that the order of the levels is meaningful (a fact which is used automatically in some models and visualisations).
+A minor variation or factors is __ordered__ factors, which generally behave similarly, but declare that the order of the levels is meaningful (a fact which is used automatically in some models and visualisations).
 
 ```{r}
 grade <- ordered(c("b", "b", "a", "c"), levels = c("c", "b", "a"))
 grade
 ```
 
-With base R[^tidyverse-factors] you tend to encounter factors very frequently, because many base R functions (like `read.csv()` and `data.frame()`) automatically convert character vectors to factors. This is suboptimal, because there's no way for those functions to know the set of all possible levels or their optimal order: the levels are a property of the experimental design, not the data. Instead, use the argument `stringsAsFactors = FALSE` to suppress this behaviour, and then manually convert character vectors to factors using your knowledge of the data. To learn about the historical context of this behaviour, I recommend [*stringsAsFactors: An unauthorized
+With base R[^tidyverse-factors] you tend to encouter factors very frequently, because many base R functions (like `read.csv()` and `data.frame()`) automatically convert character vectors to factors. This is suboptimal, because there's no way for those functions to know the set of all possible levels or their optimal order: the levels are a property of the experimental design, not the data. Instead, use the argument `stringsAsFactors = FALSE` to suppress this behaviour, and then manually convert character vectors to factors using your knowledge of the data. To learn about the historical context of this behaviour, I recommend [*stringsAsFactors: An unauthorized
 biography*](http://simplystatistics.org/2015/07/24/stringsasfactors-an-unauthorized-biography/) by Roger Peng, and [*stringsAsFactors = 
 \<sigh\>*](http://notstatschat.tumblr.com/post/124987394001/stringsasfactors-sigh) by Thomas Lumley.
 
@@ -540,7 +541,7 @@ These are relatively esoteric data structures, but can be useful if you want to 
 
 ### Exercises
 
-1.  List all the ways that a list differs from an atomic vector.
+1.  List all the ways that a list differs from an atomic vector?
 
 1.  Why do you need to use `unlist()` to convert a list to an 
     atomic vector? Why doesn't `as.vector()` work? 
@@ -558,7 +559,7 @@ There are two important S3 vectors that are built on top of lists: data frames a
 knitr::include_graphics("diagrams/vectors/summary-tree-s3-2.png")
 ```
 
-A data frame is the most common way of storing data in R, and is crucial for effective data analysis. A data frame is a named list of equal-length vectors. It has attributes providing the (column) `names`, `row.names`[^rownames], and a class of "data.frame": 
+A data frame is the most common way of storing data in R, and is crucial for effective data analysis. A data frames is a named list of equal-length vectors. It has attributes providing the (column) `names`, `row.names`[^rownames], and a class of "data.frame": 
 
 ```{r}
 df1 <- data.frame(x = 1:2, y = 2:1)
@@ -567,7 +568,7 @@ typeof(df1)
 attributes(df1)
 ```
 
-[^rownames]: Row names are one of the most suprisingly complex data structures in R, because they've been a persistent performance issue over many years. The most straightforward representations are character or integer vectors, with one element for each row. There's also a compact representation for "automatic" row names (consecutive integers), created by `.set_row_names()`. R 3.5 has a special way of deferring integer to character conversions specifically to speed up `lm()`; see <https://svn.r-project.org/R/branches/ALTREP/ALTREP.html#deferred_string_conversions> for details.
+[^rownames]: Row names are one of the most suprisingly complex data structures in R, because they've been persistent performance issue over many years. The most straightforward representations are character or integer vectors, with one element for each row. There's also a compact representation for "automatic" row names (consecutive integers), created by `.set_row_names()`. R 3.5 has a special way of deferring integer to character conversions specifically to speed up `lm()`; see <https://svn.r-project.org/R/branches/ALTREP/ALTREP.html#deferred_string_conversions> for details.
 
 Because each element of the list has the same length, data frames have a rectangular structure, and hence shares properties of both the matrix and the list:
 
@@ -660,7 +661,7 @@ tibble(x = 1:4, y = 1)
 tibble(x = 1:4, y = 1:2)
 ```
 
-There is one final difference: `tibble()` allows you to refer to newly created variables:
+There is one final difference: `tibble()` allow you to refer to newly created variables:
 
 ```{r}
 tibble(
@@ -704,7 +705,7 @@ There are three reasons that row names are suboptimal:
     when a row can be identified by a single string. This fails in many cases,
     for example when you want to identify a row by a non-character vector 
     (e.g. a time point), or with multiple vectors (e.g. position, encoded by
-    latitidue and longitude).
+    latitude and longitude).
     
 *   Row names must be unique, so any replication of rows (e.g. from 
     bootstrapping) will create new row names. If you want to match rows from 
@@ -715,7 +716,7 @@ There are three reasons that row names are suboptimal:
     df3[c(1, 1, 1), ]
     ```
 
-For these reasons, tibbles do not support row names. Instead the tibble package provides tools to easily convert row names into a regular column with either `rownames_to_column()`, or the `rownames` argument to `as_tibble()`:
+For these reasons, tibbles do not support row names. Instead tibble package provides tools to easily convert row names into a regular column with either `rownames_to_column()`, or the `rownames` argument to `as_tibble()`:
 
 ```{r}
 as_tibble(df3, rownames = "name")
@@ -723,7 +724,7 @@ as_tibble(df3, rownames = "name")
 
 ### Printing 
 
-One of the most obvious differences between tibbles and data frames is how they are printed. I assume that you're already familiar with how data frames are printed, so here I'll highlight some of the biggest differences using an example dataset included in the dplyr package:
+One of the most obvious differences between tibbles and data frames is how they are printed. I assume that youu're already familiar with how data frames are printed, so here I'll highlight some of the biggest differences using an example dataset included in the dplyr package:
 
 ```{r}
 dplyr::starwars
@@ -737,8 +738,8 @@ Tibbles:
 * Each column is labelled with its type, abbreviated to three or four letters.
 
 * Wide columns are truncated to avoid a single long string occupying an entire
-  row. (This is still a work in progress: it's tricky to get the tradeoff 
-  right between showing as many columns as possible and showing a single wide 
+  row. (This is still a work in progress: it's tricky to get the tradeoff right 
+  between showing as many columns as possible and showing a single wide 
   column fully.)
 
 * When used in console environments that support it, colour is used judiciously 
@@ -808,7 +809,7 @@ You can coerce an object to a data frame with `as.data.frame()` or to as tibble 
 \index{data frames!list-column}
 \indexc{I()}
 
-Since a data frame is a list of vectors, it is possible for a data frame to have a column that is a list. This is very useful because a list can contain any other object, which means that you can put any object in a data frame. This allows you to keep related objects together in a row, no matter how complex the individual objects are. You can see an application of this in the "Many Models" chapter of "R for Data Science", <http://r4ds.had.co.nz/many-models.html>.
+Since a data frame is a list of vectors, it is possible for a data frame to have a column that is a list. This is very useful because a list can contain any other object, which means that you can put any object in a data frame. This allows you to keep related objects together in a row, no matter how complex the individual objects are. You can see an application of this in the "Many Models" chapter of "R for Data Sicence", <http://r4ds.had.co.nz/many-models.html>.
 
 List-columns are allowed in data frames but you have to do a little extra work, either adding the list-column after creation, or wrapping the list in `I()`.
 
@@ -838,7 +839,7 @@ tibble(
 ### Matrix and data frame columns
 \index{data frames!matrix-column}
 
-It's also possible to have a column of a data frame that's a matrix or array, as long as the number of rows matches the data frame.  (This requires a slight extension to our definition of a data frame: it's not the `length()` of each column that must be equal; but the `NROW()`.) Like with list-columns, you must either add after creation, or wrap in `I()`.
+It's also possible to have a column of a data frame that's a matrix or array, as long as the number of rows matches the data frame.  (This requires a slight extention to our definition of a data frame: it's not the `length()` of each column that must be equal; but the `NROW()`.) Like with list-columns, you must either add after creation, or wrap in `I()`.
 
 ```{r}
 dfm <- data.frame(
@@ -873,7 +874,7 @@ dfm[1, ]
 
 ## `NULL`
 
-To finish up the chapter, I wanted to talk about a final important data struture that's closely related to vectors: `NULL`. `NULL` is special because it has a unique type, is always length 0, and can't have any attributes:
+To finish up the chapter, I wanted to talk about a final important data structure that's closely related to vectors: `NULL`. `NULL` is special because it has a unique type, is always length 0, and can't have any attributes:
 
 ```{r, error = TRUE}
 typeof(NULL)
